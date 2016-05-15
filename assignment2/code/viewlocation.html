@@ -12,9 +12,26 @@
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
         <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
-    </head>
+        <title>Simple Map</title>
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+            #map{
+                margin-left: 50px;
+                margin-top: 20px;
+                height: 500px;
+                width: 500px;
+            }
+        </style>
+      </head>
     
-    <body>
+  <body>
+
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
           <header class="mdl-layout__header">
@@ -29,13 +46,30 @@
           <main class="mdl-layout__content">
             <div class="content-grid mdl-grid">
               <div class="mdl-cell">
-                <!--   Main page content here:   -->  
-                
-              
+                <!--   Main page content here:   --> 
+                  
+                <!-- Slider with Starting Value -->
+                <input class="mdl-slider mdl-js-slider" type="range"
+                min="0" max="30" value="30" tabindex="0">
+                  
+                <!-- Map -->
+                <div id="map"></div>
+                <script>
+                  var map;
+                  function initMap() {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                      center: {lat: -34.397, lng: 150.644},
+                      zoom: 8
+                    });
+                  }
+                </script>
+                <script async defer
+              src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=&amp;callback=initMap">
+                </script>
               </div>
             </div>
-          </main>    
-        </div>
+          </main>
+        </div>  
 
         <!--   JavaScript files:   -->
         <script src="js/locationWeatherCache.js"></script>
