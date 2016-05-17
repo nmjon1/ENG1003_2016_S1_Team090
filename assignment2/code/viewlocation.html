@@ -27,6 +27,12 @@
                 height: 500px;
                 width: 500px;
             }
+            #outputArea{
+                margin-left: 50px;
+                margin-top: 20px;
+                height: 500px;
+                width: 500px;
+            }
         </style>
       </head>
     
@@ -66,6 +72,25 @@
                 <script async defer
               src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=&amp;callback=initMap">
                 </script>
+                
+                <!-- Weather -->
+                  <div id="outputArea"></div>
+                  
+                  <script>
+                    var outputAreaRef = document.getElementById("outputArea")
+                    var output = "";
+                    function weatherResult(forecast)
+                    {
+                         output +="Temperature is " + forecast["currently"].temperature;
+                        outputAreaRef.innerHTML = output;
+                    }
+                
+                  </script>
+
+                    <script type="application/javascript"
+                            src="https://api.forecast.io/forecast/b0d9cfc6e50e108064070318f45d3254/-34.397,150.644?callback=weatherResult">
+                    </script>
+              </div>
               </div>
             </div>
           </main>
