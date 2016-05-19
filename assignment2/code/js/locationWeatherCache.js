@@ -11,14 +11,14 @@ Date.prototype.simpleDateString = function() {
             pad(this.getDate(), 2);
     
     return dateString;
-}
+};
 
 // Date format required by forecast.io API.
 // We always represent a date with a time of midday,
 // so our choice of day isn't susceptible to time zone errors.
 Date.prototype.forecastDateString = function() {
     return this.simpleDateString() + "T12:00:00";
-}
+};
 
 
 // Code for LocationWeatherCache class and other shared code.
@@ -32,18 +32,21 @@ function LocationWeatherCache()
 
     var locations = [];
     var callbacks = {};
+    var me = this;
 
     // Public methods:
     
     // Returns the number of locations stored in the cache.
     //
     this.length = function() {
+        return locations.length
     };
     
     // Returns the location object for a given index.
     // Indexes begin at zero.
     //
     this.locationAtIndex = function(index) {
+        return locations[index]
     };
 
     // Given a latitude, longitude and nickname, this method saves a 
@@ -52,13 +55,20 @@ function LocationWeatherCache()
     //
     this.addLocation = function(latitude, longitude, nickname)
     {
-    }
+        locations.push({
+            nickname: nickname,
+            latitude: latitude,
+            longitude: longitude,
+            forecasts: {
+            }
+        })
+    };
 
     // Removes the saved location at the given index.
     // 
     this.removeLocationAtIndex = function(index)
     {
-    }
+    };
 
     // This method is used by JSON.stringify() to serialise this class.
     // Note that the callbacks attribute is only meaningful while there 
@@ -85,6 +95,28 @@ function LocationWeatherCache()
     // weather object for that location.
     // 
     this.getWeatherAtIndexForDate = function(index, date, callback) {
+        var APIKEY = 'b0d9cfc6e50e108064070318f45d3254';
+
+        var dateCached = false;
+
+        if (dateCached) {
+            // Get the weather from the cache
+        } else {
+            // Get it from the API
+            var script = document.createElement("script");
+            var location = this.locationAtIndex(index);
+            global_callback = callback;
+            script.src = 'https://api.forecast.io/forecast/'
+                + APIKEY + '/'
+                + String(location.latitude) + ','
+                + String(location.longitude)+ ','
+                + date.forecastDateString()
+                + '?callback=global_callback'
+                + '&exclude=hourly,minutely';
+            document.body.appendChild(script)
+        }
+
+
     };
     
     // This is a callback function passed to forecast.io API calls.
@@ -93,8 +125,17 @@ function LocationWeatherCache()
     // This should invoke the recorded callback function for that
     // weather request.
     //
+
+
     this.weatherResponse = function(response) {
+        var location = me.locationAtIndex(indexForLocation(response.latitude,response.longitude));
+        var forecast_key = String(response.latitude) + ','
+            + String(response.longitude) + ','
+            + new Date(response.daily.data[0].time).forecastDateString();
+        location.forecasts[forecast_key] = response.daily;
+        return response;
     };
+
 
     // Private methods:
     
@@ -105,6 +146,12 @@ function LocationWeatherCache()
     //
     function indexForLocation(latitude, longitude)
     {
+        for (var i = 0; i < locations.length; i++ ){
+            var location = me.locationAtIndex(i);
+            if (location.latitude == latitude && location.longitude == longitude){
+                return i
+            }
+        }
     }
 }
 
@@ -119,4 +166,10 @@ function loadLocations()
 function saveLocations()
 {
 }
+
+cache = new LocationWeatherCache();
+
+cache.addLocation(37.8267,-122.423,'Coolest place around');
+
+var response = cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse);
 
