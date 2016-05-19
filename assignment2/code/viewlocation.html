@@ -33,6 +33,9 @@
                 height: 500px;
                 width: 500px;
             }
+            #date{
+                margin-left: 50px;
+            }
         </style>
       </head>
     
@@ -46,7 +49,11 @@
               </button>
             <div class="mdl-layout__header-row">
               <span class="mdl-layout-title" id="headerBarTitle">View Location</span>
-            </div>
+            </div>           
+          <!-- Remove location button -->
+            <button onclick="deleteLocation()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+              Remove this location
+            </button>                  
           </header>
 
           <main class="mdl-layout__content">
@@ -57,6 +64,28 @@
                 <!-- Slider with Starting Value -->
                 <input class="mdl-slider mdl-js-slider" type="range"
                 min="0" max="30" value="30" tabindex="0">
+                
+                <!-- Date -->
+                  <div id="date"></div>
+                      <script>
+                    var outputAreaRef = document.getElementById("date")
+                    var output = "";
+  
+                    function timeConverter(UNIX_timestamp){
+                      var a = new Date(UNIX_timestamp * 1000);
+                      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                      var year = a.getFullYear();
+                      var month = months[a.getMonth()];
+                      var date = a.getDate();
+                      var time = date + ' ' + month + ' ' + year + ' ' ;
+                      return time;
+                    }
+                        //timeConverter should have the current time as its variable
+                    output += timeConverter(1)
+                    outputAreaRef.innerHTML = output;
+                    
+                      </script>
+                                    
                   
                 <!-- Map -->
                 <div id="map"></div>
@@ -81,7 +110,9 @@
                     var output = "";
                     function weatherResult(forecast)
                     {
-                         output +="Temperature is " + forecast["currently"].temperature;
+                        output +="Current temperature is " + forecast["currently"].temperature + "</br>";
+                        output +="The maximum will be " + forecast["daily"].data[1].temperatureMax + "</br>";
+                        output +="The minimum will be " + forecast["daily"].data[1].temperatureMin + "</br>";
                         outputAreaRef.innerHTML = output;
                     }
                 
@@ -90,6 +121,16 @@
                     <script type="application/javascript"
                             src="https://api.forecast.io/forecast/b0d9cfc6e50e108064070318f45d3254/-34.397,150.644?callback=weatherResult">
                     </script>
+
+                <!-- Remove location from cache -->
+                  <script>
+                    var outputAreaRef = document.getElementById("outputArea")
+                    var output = "";
+                  function deleteLocation(){
+                      output+="It works "
+                      outputAreaRef.innerHTML += output;
+                  }
+                  </script>
               </div>
               </div>
             </div>
