@@ -12,9 +12,35 @@
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
         <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
-    </head>
+        <title>Simple Map</title>
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+            #map{
+                margin-left: 50px;
+                margin-top: 20px;
+                height: 500px;
+                width: 500px;
+            }
+            #outputArea{
+                margin-left: 50px;
+                margin-top: 20px;
+                height: 500px;
+                width: 500px;
+            }
+            #date{
+                margin-left: 50px;
+            }
+        </style>
+      </head>
     
-    <body>
+  <body>
+
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
           <header class="mdl-layout__header">
@@ -23,19 +49,93 @@
               </button>
             <div class="mdl-layout__header-row">
               <span class="mdl-layout-title" id="headerBarTitle">View Location</span>
-            </div>
+            </div>           
+          <!-- Remove location button -->
+            <button onclick="deleteLocation()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+              Remove this location
+            </button>                  
           </header>
 
           <main class="mdl-layout__content">
             <div class="content-grid mdl-grid">
               <div class="mdl-cell">
-                <!--   Main page content here:   -->  
+                <!--   Main page content here:   --> 
+                  
+                <!-- Slider with Starting Value -->
+                <input class="mdl-slider mdl-js-slider" type="range"
+                min="0" max="30" value="30" tabindex="0">
                 
-              
+                <!-- Date -->
+                  <div id="date"></div>
+                      <script>
+                    var outputAreaRef = document.getElementById("date")
+                    var output = "";
+  
+                    function timeConverter(UNIX_timestamp){
+                      var a = new Date(UNIX_timestamp * 1000);
+                      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                      var year = a.getFullYear();
+                      var month = months[a.getMonth()];
+                      var date = a.getDate();
+                      var time = date + ' ' + month + ' ' + year + ' ' ;
+                      return time;
+                    }
+                        //timeConverter should have the current time as its variable
+                    output += timeConverter(1)
+                    outputAreaRef.innerHTML = output;
+                    
+                      </script>
+                                    
+                  
+                <!-- Map -->
+                <div id="map"></div>
+                <script>
+                  var map;
+                  function initMap() {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                      center: {lat: -34.397, lng: 150.644},
+                      zoom: 8
+                    });
+                  }
+                </script>
+                <script async defer
+              src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=&amp;callback=initMap">
+                </script>
+                
+                <!-- Weather -->
+                  <div id="outputArea"></div>
+                  
+                  <script>
+                    var outputAreaRef = document.getElementById("outputArea")
+                    var output = "";
+                    function weatherResult(forecast)
+                    {
+                        output +="Current temperature is " + forecast["currently"].temperature + "</br>";
+                        output +="The maximum will be " + forecast["daily"].data[1].temperatureMax + "</br>";
+                        output +="The minimum will be " + forecast["daily"].data[1].temperatureMin + "</br>";
+                        outputAreaRef.innerHTML = output;
+                    }
+                
+                  </script>
+
+                    <script type="application/javascript"
+                            src="https://api.forecast.io/forecast/b0d9cfc6e50e108064070318f45d3254/-34.397,150.644?callback=weatherResult">
+                    </script>
+
+                <!-- Remove location from cache -->
+                  <script>
+                    var outputAreaRef = document.getElementById("outputArea")
+                    var output = "";
+                  function deleteLocation(){
+                      output+="It works "
+                      outputAreaRef.innerHTML += output;
+                  }
+                  </script>
+              </div>
               </div>
             </div>
-          </main>    
-        </div>
+          </main>
+        </div>  
 
         <!--   JavaScript files:   -->
         <script src="js/locationWeatherCache.js"></script>
