@@ -36,27 +36,40 @@
             <ul class="mdl-list" id="locationList">
               <script>
                 for(var i=0;i<locationWeatherCache.length();i++) {
+                    
+                  // Get the location object
                   var loc = locationWeatherCache.locationAtIndex(i);
+                  
+                  // List element
                   var li = document.createElement('li');
                   li.className = 'mdl-list__item mdl-list__item--two-line';
+                  
+                  // Span element
                   var span = document.createElement('span');
                   span.className = 'mdl-list__item-primary-content';
+                  
+                  // Icon element
                   var img = document.createElement('img');
                   img.className = 'mdl-list__item-icon list-avatar';
                   img.setAttribute('id', 'icon' + i);
                   img.setAttribute('src', 'images/loading.png');
+                  
+                  // Location title element
                   var locationTitle = document.createElement('span');
                   var locationTextNode = document.createTextNode(loc.nickname);
                   locationTitle.appendChild(locationTextNode);
+                  
+                  // Weather summary element
                   var weatherSummary = document.createElement('span');
                   weatherSummary.className = 'mdl-list__item-sub-title';
                   weatherSummary.setAttribute('id', 'weather' + i);
                   var weatherTextNode = document.createTextNode('Loading weather...');
                   weatherSummary.appendChild(weatherTextNode);
-                  span.appendChild(img);
-                  span.appendChild(locationTitle);
-                  span.appendChild(weatherSummary);
-                  li.appendChild(span);
+                  
+                  span.appendChild(img); // Add image to span
+                  span.appendChild(locationTitle); // Add location title to span
+                  span.appendChild(weatherSummary); // Add weather summary to span
+                  li.appendChild(span); // Add span to List element
                   li.setAttribute('onclick', 'viewLocation(' + i + ')');
                   document.getElementById('locationList').appendChild(li);
                 }
