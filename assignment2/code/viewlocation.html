@@ -6,6 +6,9 @@
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
         <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.indigo-pink.min.css">
         <script src="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.min.js"></script>
+                <!--   JavaScript files:   -->
+        <script src="js/locationWeatherCache.js"></script>
+        <script src="js/viewLocationPage.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <link rel="stylesheet" href="css/weatherapp.css" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,7 +54,6 @@
               <span class="mdl-layout-title" id="headerBarTitle">View Location</span>
             </div>           
           <!-- Remove location button -->
-            <button onclick="deleteLocation()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
               Remove this location
             </button>                  
           </header>
@@ -62,30 +64,22 @@
                 <!--   Main page content here:   --> 
                   
                 <!-- Slider with Starting Value -->
-                <input class="mdl-slider mdl-js-slider" type="range"
-                min="0" max="30" value="30" tabindex="0">
+                <input class="mdl-slider mdl-js-slider" id="s1" type="range"
+                min="0" max="30" value="30" tabindex="0" oninput="change(this.value)" onchange="change(this.value)" >
                 
                 <!-- Date -->
                   <div id="date"></div>
                       <script>
                     var outputAreaRef = document.getElementById("date")
                     var output = "";
-  
-                    function timeConverter(UNIX_timestamp){
-                      var a = new Date(UNIX_timestamp * 1000);
-                      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                      var year = a.getFullYear();
-                      var month = months[a.getMonth()];
-                      var date = a.getDate();
-                      var time = date + ' ' + month + ' ' + year + ' ' ;
-                      return time;
-                    }
-                        //timeConverter should have the current time as its variable
-                    output += timeConverter(1)
+                        function change(value)
+                      {
+                         document.getElementById("date").innerHTML = value;
+                      }
+                    output += Date.prototype.simpleDateString
                     outputAreaRef.innerHTML = output;
                     
-                      </script>
-                                    
+                      </script>                                  
                   
                 <!-- Map -->
                 <div id="map"></div>
@@ -110,9 +104,11 @@
                     var output = "";
                     function weatherResult(forecast)
                     {
-                        output +="Current temperature is " + forecast["currently"].temperature + "</br>";
-                        output +="The maximum will be " + forecast["daily"].data[1].temperatureMax + "</br>";
-                        output +="The minimum will be " + forecast["daily"].data[1].temperatureMin + "</br>";
+                        output +="Current temperature is " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
+                        output +="The maximum will be " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
+                        output +="The minimum will be " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
+                        output +="The current humidity is " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
+                        output +="The current windspeed " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
                         outputAreaRef.innerHTML = output;
                     }
                 
@@ -122,23 +118,11 @@
                             src="https://api.forecast.io/forecast/b0d9cfc6e50e108064070318f45d3254/-34.397,150.644?callback=weatherResult">
                     </script>
 
-                <!-- Remove location from cache -->
-                  <script>
-                    var outputAreaRef = document.getElementById("outputArea")
-                    var output = "";
-                  function deleteLocation(){
-                      output+="It works "
-                      outputAreaRef.innerHTML += output;
-                  }
-                  </script>
               </div>
               </div>
             </div>
           </main>
         </div>  
-
-        <!--   JavaScript files:   -->
-        <script src="js/locationWeatherCache.js"></script>
-        <script src="js/viewLocationPage.js"></script>
+    
     </body>
 </html>
