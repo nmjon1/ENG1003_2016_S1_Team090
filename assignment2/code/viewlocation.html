@@ -73,6 +73,7 @@
                       <script>
                     var outputAreaRef = document.getElementById("date")
                     var output = "";
+                    //use a function such as this to select the date
                         function change(value)
                       {
                          document.getElementById("date").innerHTML = value;
@@ -88,6 +89,7 @@
                   var map;
                   function initMap() {
                     map = new google.maps.Map(document.getElementById('map'), {
+                    //centre should have the location index
                       center: {lat: -34.397, lng: 150.644},
                       zoom: 8
                     });
@@ -109,7 +111,7 @@
                         output +="The maximum will be " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
                         output +="The minimum will be " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
                         output +="The current humidity is " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
-                        output +="The current windspeed " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
+                        output +="The current wind speed " + cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse) + "</br>";
                         outputAreaRef.innerHTML = output;
                     }
                 
