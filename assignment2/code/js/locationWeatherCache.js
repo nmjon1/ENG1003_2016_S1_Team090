@@ -55,19 +55,26 @@ function LocationWeatherCache()
     //
     this.addLocation = function(latitude, longitude, nickname)
     {
-        locations.push({
-            nickname: nickname,
-            latitude: latitude,
-            longitude: longitude,
-            forecasts: {
-            }
-        })
+        var index = indexForLocation(latitude,longitude);
+
+        if (index == null) {
+            locations.push({
+                nickname: nickname,
+                latitude: latitude,
+                longitude: longitude,
+                forecasts: {}
+            });
+            return locations.length - 1
+        } else {
+            return index;
+        }
     };
 
     // Removes the saved location at the given index.
     // 
     this.removeLocationAtIndex = function(index)
     {
+        locations.splice(index, 1);
     };
 
     // This method is used by JSON.stringify() to serialise this class.
@@ -75,6 +82,12 @@ function LocationWeatherCache()
     // are active web service requests and so doesn't need to be saved.
     //
     this.toJSON = function() {
+        var json = [];
+        for (var i = 0; i < locations.length; i++) {
+            json.push(JSON.stringify(locations[i]))
+        }
+
+        return JSON.stringify(json)
     };
 
     // Given a public-data-only version of the class (such as from
@@ -82,6 +95,11 @@ function LocationWeatherCache()
     // instance to match that version.
     //
     this.initialiseFromPDO = function(locationWeatherCachePDO) {
+        var json_list = JSON.parse(locationWeatherCachePDO);
+        for (var i = 0; i < json_list.length; i++) {
+            var location = JSON.parse(json_list[i]);
+            locations.push(location)
+        }
     };
 
     // Request weather for the location at the given index for the
@@ -105,15 +123,14 @@ function LocationWeatherCache()
             // Get it from the API
             var script = document.createElement("script");
             var location = this.locationAtIndex(index);
-            global_callback = callback;
             script.src = 'https://api.forecast.io/forecast/'
                 + APIKEY + '/'
                 + String(location.latitude) + ','
                 + String(location.longitude)+ ','
                 + date.forecastDateString()
-                + '?callback=global_callback'
+                + '?callback=locationWeatherCache.weatherResponse'
                 + '&exclude=hourly,minutely';
-            document.body.appendChild(script)
+            document.body.appendChild(script);
         }
 
 
@@ -128,12 +145,14 @@ function LocationWeatherCache()
 
 
     this.weatherResponse = function(response) {
-        var location = me.locationAtIndex(indexForLocation(response.latitude,response.longitude));
+        var index = indexForLocation(response.latitude,response.longitude);
+        var location = this.locationAtIndex();
+        var date = new Date(daily.time * 1000);
         var forecast_key = String(response.latitude) + ','
             + String(response.longitude) + ','
-            + new Date(response.daily.data[0].time).forecastDateString();
+            + date.forecastDateString();
         location.forecasts[forecast_key] = response.daily;
-        return response;
+        return response.daily;
     };
 
 
@@ -167,9 +186,6 @@ function saveLocations()
 {
 }
 
-cache = new LocationWeatherCache();
+var locationWeatherCache;
 
-cache.addLocation(37.8267,-122.423,'Coolest place around');
-
-var response = cache.getWeatherAtIndexForDate(0, new Date(),cache.weatherResponse);
 
