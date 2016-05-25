@@ -78,9 +78,11 @@
                         function change(value)
                       {
                         var newD = new Date - new Date(8.64e+7*(30-value))
-                        document.getElementById("date").innerHTML = new Date(newD);
+                        var thisDate = new Date(newD)
+                        document.getElementById("date").innerHTML = thisDate.simpleDateString();
                       }
-                    output += new Date
+                    var nDate = new Date
+                    output += nDate.simpleDateString()
                     outputAreaRef.innerHTML = output;
                     
                       </script>                                  
