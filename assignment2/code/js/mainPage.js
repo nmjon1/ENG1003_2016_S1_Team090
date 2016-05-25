@@ -9,7 +9,7 @@ function init()
 {
     for(var index=0;index < locationWeatherCache.length();index++) {
     locationWeatherCache.getWeatherAtIndexForDate(index, new Date(), function(index, data){
-    var summary = 'Min: ' + fToC(data.temperatureMin) + ', Max: ' + fToC(data.temperatureMax);
+    var summary = 'Min: ' + data.temperatureMin + ', Max: ' + data.temperatureMax;
     document.getElementById('weather' + index).textContent = summary;
     document.getElementById('icon' + index).src = 'images/' + data.icon + '.png';
     });
