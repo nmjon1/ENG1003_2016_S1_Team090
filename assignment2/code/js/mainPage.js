@@ -1,8 +1,10 @@
 // Code for the main app page (locations list).
 // Creat function to get weather data from the cache
 // Input: weather index, date
-// Output: Weather summary 
-init();
+// Output: Weather summary
+
+document.addEventListener("DOMContentLoaded", init);
+
 function init() 
 {
     for(var index=0;index < locationWeatherCache.length();index++) {
