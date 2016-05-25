@@ -64,6 +64,7 @@ function LocationWeatherCache()
                 longitude: longitude,
                 forecasts: {}
             });
+            saveLocations()
             return locations.length - 1
         } else {
             return index;
@@ -75,6 +76,12 @@ function LocationWeatherCache()
     this.removeLocationAtIndex = function(index)
     {
         locations.splice(index, 1);
+        saveLocations();
+    };
+
+    this.removeAllLocations = function() {
+        locations.splice(0,locations.length);
+        saveLocations()
     };
 
     // This method is used by JSON.stringify() to serialise this class.
@@ -121,8 +128,10 @@ function LocationWeatherCache()
             + date.forecastDateString();
         var forecast;
 
+        callbacks[forecast_key] = callback;
+
         if (location.forecasts.hasOwnProperty(forecast_key)) {
-            forecast = location.forecasts[forecast_key];
+            callback(index, location.forecasts[forecast_key])
         } else {
             // Get it from the API
             var script = document.createElement("script");
@@ -134,7 +143,7 @@ function LocationWeatherCache()
             document.body.appendChild(script);
         }
 
-        return callback(forecast)
+
     };
     
     // This is a callback function passed to forecast.io API calls.
@@ -154,6 +163,11 @@ function LocationWeatherCache()
             + String(response.longitude) + ','
             + date.forecastDateString();
         location.forecasts[forecast_key] = today;
+        saveLocations();
+
+        var callback = callbacks[forecast_key];
+        callback(index,today)
+
     };
 
 
@@ -177,20 +191,26 @@ function LocationWeatherCache()
 
 // Restore the singleton locationWeatherCache from Local Storage.
 //
+
+var locationWeatherCache = new LocationWeatherCache;
+loadLocations();
+
 function loadLocations()
 {
+    if (!(localStorage.getItem(APP_PREFIX + '-locations') === null)) {
+        var lwc_PDO = localStorage.getItem(APP_PREFIX + '-locations');
+        locationWeatherCache.initialiseFromPDO(lwc_PDO);
+    }
 }
 
 // Save the singleton locationWeatherCache to Local Storage.
 //
 function saveLocations()
 {
+    localStorage.setItem(APP_PREFIX + "-locations", locationWeatherCache.toJSON())
 }
-
-var locationWeatherCache = new LocationWeatherCache;
 
 // Testing stuff
 
-function my_return(thing) {return thing}
+function my_return(index, thing) {return thing}
 
-console.log(locationWeatherCache.addLocation(11,11,'name'))
