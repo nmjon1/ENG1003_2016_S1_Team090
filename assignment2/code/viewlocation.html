@@ -80,6 +80,7 @@
                         var newD = new Date - new Date(8.64e+7*(30-value))
                         var thisDate = new Date(newD)
                         document.getElementById("date").innerHTML = thisDate.simpleDateString();
+                          locationWeatherCache.getWeatherAtIndexForDate(0, thisDate, weatherResult)
                       }
                     var nDate = new Date
                     output += nDate.simpleDateString()
@@ -94,8 +95,8 @@
                   function initMap() {
                     map = new google.maps.Map(document.getElementById('map'), {
                     //centre should have the location index
-                      center: {lat: locationWeatherCache.indexForLocation(0).latitude, lng: locationWeatherCache.indexForLocation(0).longitude},
-                      zoom: 8
+                      center: {lat: locationWeatherCache.locationAtIndex(0).latitude, lng: locationWeatherCache.locationAtIndex(0).longitude},
+                      zoom: 5
                     });
                   }
                 </script>
@@ -109,21 +110,23 @@
                   <script>
                     var outputAreaRef = document.getElementById("outputArea")
                     var output = "";
-                    function weatherResult(forecast)
+                    locationWeatherCache.addLocation(-34,134,"name")
+                    function weatherResult(Index,forecast)
                     {
-                        output +="Today, it will be " + locationWeatherCache.getWeatherAtIndexForDate(0, new Date(),locationWeatherCache.weatherResponse) + "</br>";
-                        output +="The maximum will be " + locationWeatherCache.getWeatherAtIndexForDate(0, new Date(),locationWeatherCache.weatherResponse) + "</br>";
-                        output +="The minimum will be " + locationWeatherCache.getWeatherAtIndexForDate(0, new Date(),locationWeatherCache.weatherResponse) + "</br>";
-                        output +="The current humidity is " + locationWeatherCache.getWeatherAtIndexForDate(0, new Date(),locationWeatherCache.weatherResponse) + "</br>";
-                        output +="The current wind speed " + locationWeatherCache.getWeatherAtIndexForDate(0, new Date(),locationWeatherCache.weatherResponse) + "</br>";
+                        output ="Forecast: " + forecast.summary + "</br>";
+                        output +="The maximum will be " + forecast.temperatureMax+ "</br>";
+                        output +="The minimum will be " + forecast.temperatureMin + "</br>";
+                        output +="The current humidity is " + forecast.humidity *100 + "%" + "</br>";
+                        output +="The current wind speed " + forecast.windSpeed + "km/h" +"</br>";
                         outputAreaRef.innerHTML = output;
                     }
-                
+                    locationWeatherCache.getWeatherAtIndexForDate(0, new Date, weatherResult)
+                      
                   </script>
               </div>
               </div>
             </div>
-          </main>
+          </main>   
         </div>  
     
     </body>
