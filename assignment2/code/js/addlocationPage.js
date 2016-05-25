@@ -64,3 +64,4 @@ function initMap() {
   });
   
     autocomplete.setTypes([]);
+}
