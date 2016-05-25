@@ -139,7 +139,8 @@ function LocationWeatherCache()
                 + APIKEY + '/'
                 + forecast_key
                 + '?callback=locationWeatherCache.weatherResponse'
-                + '&exclude=hourly,minutely,currently';
+                + '&exclude=hourly,minutely,currently'
+                + '&units=ca';
             document.body.appendChild(script);
         }
 
