@@ -115,25 +115,26 @@ function LocationWeatherCache()
     this.getWeatherAtIndexForDate = function(index, date, callback) {
         var APIKEY = 'b0d9cfc6e50e108064070318f45d3254';
 
-        var dateCached = false;
+        var location = this.locationAtIndex(index);
+        var forecast_key = String(location.latitude) + ','
+            + String(location.longitude) + ','
+            + date.forecastDateString();
+        var forecast;
 
-        if (dateCached) {
-            // Get the weather from the cache
+        if (location.forecasts.hasOwnProperty(forecast_key)) {
+            forecast = location.forecasts[forecast_key];
         } else {
             // Get it from the API
             var script = document.createElement("script");
-            var location = this.locationAtIndex(index);
             script.src = 'https://api.forecast.io/forecast/'
                 + APIKEY + '/'
-                + String(location.latitude) + ','
-                + String(location.longitude)+ ','
-                + date.forecastDateString()
+                + forecast_key
                 + '?callback=locationWeatherCache.weatherResponse'
-                + '&exclude=hourly,minutely';
+                + '&exclude=hourly,minutely,currently';
             document.body.appendChild(script);
         }
 
-
+        return callback(forecast)
     };
     
     // This is a callback function passed to forecast.io API calls.
@@ -145,14 +146,14 @@ function LocationWeatherCache()
 
 
     this.weatherResponse = function(response) {
+        var today =  response.daily.data[0];
         var index = indexForLocation(response.latitude,response.longitude);
-        var location = this.locationAtIndex();
-        var date = new Date(daily.time * 1000);
+        var location = this.locationAtIndex(index);
+        var date = new Date(today.time * 1000);
         var forecast_key = String(response.latitude) + ','
             + String(response.longitude) + ','
             + date.forecastDateString();
-        location.forecasts[forecast_key] = response.daily;
-        return response.daily;
+        location.forecasts[forecast_key] = today;
     };
 
 
@@ -186,6 +187,10 @@ function saveLocations()
 {
 }
 
-var locationWeatherCache;
+var locationWeatherCache = new LocationWeatherCache;
 
+// Testing stuff
 
+function my_return(thing) {return thing}
+
+console.log(locationWeatherCache.addLocation(11,11,'name'))
