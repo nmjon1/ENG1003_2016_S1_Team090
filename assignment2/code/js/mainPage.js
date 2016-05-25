@@ -1,7 +1,7 @@
 // Code for the main app page (locations list).
-/* Creat function to get weather data from the cache
-    Input: weather index, date
-    Output: Weather summary */
+// Creat function to get weather data from the cache
+// Input: weather index, date
+// Output: Weather summary 
 init();
 function init() 
 {
