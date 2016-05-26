@@ -25,21 +25,21 @@
                 height: 100%;
             }
             #map{
-                margin-left: 50px;
+                margin-left: 25px;
                 margin-top: 20px;
                 height: 500px;
-                width: 500px;
+                width: 570px;
             }
             #outputArea{
-                margin-left: 50px;
+                margin-left: 25px;
                 margin-top: 20px;
                 height: 500px;
                 width: 500px;
             }
             #date{
-                margin-left: 50px;
+                margin-left: 25px;
             }
-            
+                    
             #Name{
                 margin-left: 80px;
                 margin-bottom: 10px
@@ -59,7 +59,7 @@
             <div class="mdl-layout__header-row">
               <span class="mdl-layout-title" id="headerBarTitle">View Location</span>
             </div>   
-            <div id="Name"; class="mdl-layout-title">
+            <div id="Name"; class="mdl-layout">
               <script>
                   var outputAreaRef = document.getElementById("Name")
                     var output = "";
@@ -143,8 +143,8 @@
                     function weatherResult(Index,forecast)
                     {
                         output ="Forecast: " + forecast.summary + "</br>";
-                        output +="The maximum will be " + forecast.temperatureMax+ "</br>";
-                        output +="The minimum will be " + forecast.temperatureMin + "</br>";
+                        output +="The maximum will be " + forecast.temperatureMax+ "&deg"+ "C" +"</br>";
+                        output +="The minimum will be " + forecast.temperatureMin + "&deg"+ "C" +"</br>";
                         output +="The current humidity is " + forecast.humidity *100 + "%" + "</br>";
                         output +="The current wind speed " + forecast.windSpeed + "km/h" +"</br>";
                         outputAreaRef.innerHTML = output;
