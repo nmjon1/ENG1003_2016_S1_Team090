@@ -1,10 +1,10 @@
 // Code for the main app page (locations list).
-// Creat function to get weather data from the cache
-// Input: weather index, date
-// Output: Weather summary
-
+// Create an event listener that waits until the DOM is loaded, when the event occurs, the function init is called.
 document.addEventListener("DOMContentLoaded", init);
 
+// Creat function to get weather data from the cache.
+// Input: Weather index, date
+// Output: Weather summary
 function init() 
 {
     for(var index=0;index < locationWeatherCache.length();index++) {
