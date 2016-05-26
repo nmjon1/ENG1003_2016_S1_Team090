@@ -67,7 +67,7 @@
               </script>
               </div>
           <!-- Remove location button -->
-            <button onclick="locationWeatherCache.removeLocationAtIndex()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+            <button onclick="removeCheck()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
               Remove this location
             </button>
           </header>
@@ -76,6 +76,22 @@
             <div class="content-grid mdl-grid">
               <div class="mdl-cell">
                 <!--   Main page content here:   --> 
+                  
+                <!--remove location-->
+                <div>
+                    <script>
+                        function removeCheck(){
+                            //alert pops up to confirm deleting location
+                            //if user confirms, location deleted and taken back to main page
+                            if(confirm("Are you sure you want to delete this location?"))
+                                {
+                                    locationWeatherCache.removeLocationAtIndex();
+                                    location.href = 'index.html'
+                                }
+                            else {}                              
+                            }
+                    </script>
+                </div>
                         
                 <!-- Date -->
                   <div id="date"></div>
