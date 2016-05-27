@@ -16,7 +16,7 @@
     </head>
     
     <body>
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<!--        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
           <header class="mdl-layout__header">
               <button onclick="location.href = 'index.html';" class="mdl-layout-icon mdl-button mdl-js-button mdl-button--icon"> 
                 <i class="material-icons">arrow_back</i>
@@ -26,14 +26,25 @@
             </div>
           </header>
           <main class="mdl-layout__content">
-            <div class="content-grid mdl-grid">
+            <div class="content-grid mdl-grid">-->
               <div class="mdl-cell">
                 <!--   Main page content here:   -->  
                   <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+                  <div id="type-selector" class="controls">
+                      <input type="radio" name="type" id="changetype-all" checked="checked">
+                      <label for="changetype-all">All</label>
+                      <input type="radio" name="type" id="changetype-establishment">
+                      <label for="changetype-establishment">Establishments</label>
+                      <input type="radio" name="type" id="changetype-address">
+                      <label for="changetype-address">Addresses</label>
+                      <input type="radio" name="type" id="changetype-geocode">
+                      <label for="changetype-geocode">Geocodes</label>
+                  </div>
                   <div id="map"></div>
                   <!-- Raised button with ripple -->
                   <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add Location</button>
               </div>
+        <!--
             </div>
           </main>    
         </div>
