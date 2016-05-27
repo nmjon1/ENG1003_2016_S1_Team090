@@ -167,7 +167,7 @@
                         outputAreaRef.innerHTML = output;
                     }
                     //gives the weather summary for the current date and time
-                    locationWeatherCache.getWeatherAtIndexForDate(localStorage.getItem("weatherApp-selectedLocation"), new Date, weatherResult)
+                    locationWeatherCache.getWeatherAtIndexForDate(localStorage.getItem(APP_PREFIX+"-selectedLocation"), new Date, weatherResult)
                       
                   </script>
               </div>
