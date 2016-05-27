@@ -124,8 +124,8 @@
                 <script>
                   var map;
                   function initMap() {
-                    //retireves the data stored from mainPage.js so that we know the index for the location chosen
-                    var selectedLocation = locationWeatherCache.locationAtIndex(localStorage.getItem("weatherApp-selectedLocation"))
+                    //retrieves the data stored from mainPage.js so that we know the index for the location chosen
+                    var selectedLocation = locationWeatherCache.locationAtIndex(localStorage.getItem(APP_PREFIX+"-selectedLocation"))
                     var locationCoords = {lat: selectedLocation.latitude, 
                                           lng: selectedLocation.longitude};
                     //initiates map, centred on location chosen
@@ -154,6 +154,7 @@
                     var output = "";
                     locationWeatherCache.addLocation(-37.9147,145.1297,"Monash Uni")
                     locationWeatherCache.addLocation(-37.8142,144.9632,"City Centre")
+                    locationWeatherCache.addLocation(-33.857281,150.877813,"42 Wallaby Way Sydney")
                     
                     //callback function used in locationWeatherCache.getweatherAtIndexForDate
                     function weatherResult(Index,forecast)
