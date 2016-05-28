@@ -18,6 +18,7 @@ function initMap() {
 
   var autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.bindTo('bounds', map);
+
   var infowindow = new google.maps.InfoWindow();
   var marker = new google.maps.Marker({
     map: map,
@@ -62,6 +63,5 @@ function initMap() {
     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
     infowindow.open(map, marker);
   });
-  
-    autocomplete.setTypes([]);
+
 }
