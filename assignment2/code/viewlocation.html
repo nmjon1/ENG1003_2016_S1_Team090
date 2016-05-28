@@ -85,7 +85,7 @@
                             //if user confirms, location deleted and taken back to main page
                             if(confirm("Are you sure you want to delete this location?"))
                                 {
-                                    locationWeatherCache.removeLocationAtIndex();
+                                    locationWeatherCache.removeLocationAtIndex(localStorage.getItem(APP_PREFIX+"-selectedLocation"));
                                     location.href = 'index.html'
                                 }
                             else {}                              
