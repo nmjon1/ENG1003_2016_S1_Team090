@@ -3,19 +3,19 @@
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
+/*var map
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -33.8688, lng: 151.2195},
     zoom: 13
   });
-  var input = /** @type {!HTMLInputElement} */(
+  /*var input = /** @type {!HTMLInputElement} *//*(
       document.getElementById('pac-input'));
 
   /*var types = document.getElementById('type-selector');
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);*/
-
+/*
   var autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.bindTo('bounds', map);
   var infowindow = new google.maps.InfoWindow();
@@ -40,7 +40,7 @@ function initMap() {
       map.setCenter(place.geometry.location);
       map.setZoom(17);  // Why 17? Because it looks good.
     }
-    marker.setIcon(/** @type {google.maps.Icon} */({
+    marker.setIcon(/** @type {google.maps.Icon} *//*({
       url: place.icon,
       size: new google.maps.Size(71, 71),
       origin: new google.maps.Point(0, 0),
@@ -64,4 +64,4 @@ function initMap() {
   });
   
     autocomplete.setTypes([]);
-}
+}*/
