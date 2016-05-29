@@ -6,13 +6,16 @@
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
         <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.indigo-pink.min.css">
         <script src="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.min.js"></script>
+                <!--   JavaScript files:   -->
+        <script src="js/locationWeatherCache.js"></script>
+        <script src="js/viewLocationPage.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <link rel="stylesheet" href="css/weatherapp.css" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
         <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
-        <title>Simple Map</title>
+        <title>Map of Location</title>
         <meta name="viewport" content="initial-scale=1.0">
         <meta charset="utf-8">
         <style>
@@ -22,20 +25,26 @@
                 height: 100%;
             }
             #map{
-                margin-left: 50px;
+                margin-left: 25px;
                 margin-top: 20px;
                 height: 500px;
-                width: 500px;
+                width: 570px;
             }
             #outputArea{
-                margin-left: 50px;
+                margin-left: 25px;
                 margin-top: 20px;
                 height: 500px;
                 width: 500px;
             }
             #date{
-                margin-left: 50px;
+                margin-left: 25px;
             }
+                    
+            #Name{
+                margin-left: 80px;
+                margin-bottom: 10px
+            }
+            
         </style>
       </head>
     
@@ -49,11 +58,18 @@
               </button>
             <div class="mdl-layout__header-row">
               <span class="mdl-layout-title" id="headerBarTitle">View Location</span>
-            </div>           
+            </div>   
+            <div id="Name"; class="mdl-layout">
+              <script>
+                  var outputAreaRef = document.getElementById("Name")
+                    var output = "";
+                  outputAreaRef.innerHTML=locationWeatherCache.locationAtIndex(localStorage.getItem("weatherApp-selectedLocation")).nickname
+              </script>
+              </div>
           <!-- Remove location button -->
-            <button onclick="deleteLocation()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+            <button onclick="removeCheck()"; class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
               Remove this location
-            </button>                  
+            </button>
           </header>
 
           <main class="mdl-layout__content">
@@ -61,42 +77,70 @@
               <div class="mdl-cell">
                 <!--   Main page content here:   --> 
                   
-                <!-- Slider with Starting Value -->
-                <input class="mdl-slider mdl-js-slider" type="range"
-                min="0" max="30" value="30" tabindex="0">
-                
+                <!--remove location-->
+                <div>
+                    <script>
+                        function removeCheck(){
+                            //alert pops up to confirm deleting location
+                            //if user confirms, location deleted and taken back to main page
+                            if(confirm("Are you sure you want to delete this location?"))
+                                {
+                                    locationWeatherCache.removeLocationAtIndex(localStorage.getItem(APP_PREFIX+"-selectedLocation"));
+                                    location.href = 'index.html'
+                                }
+                            else {}                              
+                            }
+                    </script>
+                </div>
+                        
                 <!-- Date -->
                   <div id="date"></div>
                       <script>
                     var outputAreaRef = document.getElementById("date")
                     var output = "";
-  
-                    function timeConverter(UNIX_timestamp){
-                      var a = new Date(UNIX_timestamp * 1000);
-                      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                      var year = a.getFullYear();
-                      var month = months[a.getMonth()];
-                      var date = a.getDate();
-                      var time = date + ' ' + month + ' ' + year + ' ' ;
-                      return time;
-                    }
-                        //timeConverter should have the current time as its variable
-                    output += timeConverter(1)
+                          
+                    //newD is the date selected by the slider, taking into account that the value is in days and Date is in ms
+                        function change(value)
+                      {
+                        var newD = new Date - new Date(8.64e+7*(30-value))
+                    //converts newD into D/MM/DD/YYYY format which is then converted to YYYY-MM-DD
+                        var thisDate = new Date(newD)
+                        document.getElementById("date").innerHTML = thisDate.simpleDateString();
+                          locationWeatherCache.getWeatherAtIndexForDate(0, thisDate, weatherResult)
+                      }
+                    //initial date is set (today)
+                    var nDate = new Date
+                    output += nDate.simpleDateString()
                     outputAreaRef.innerHTML = output;
                     
-                      </script>
-                                    
+                      </script>       
+                <!-- Slider with Starting Value -->
+                <!-- slider runs the function change() from above whenever the slide is moved -->
+                <input class="mdl-slider mdl-js-slider" id="s1" type="range"
+                min="0" max="37" value="30" tabindex="0" oninput="change(this.value)" onchange="change(this.value)" >
                   
                 <!-- Map -->
                 <div id="map"></div>
                 <script>
                   var map;
                   function initMap() {
+                    //retrieves the data stored from mainPage.js so that we know the index for the location chosen
+                    var selectedLocation = locationWeatherCache.locationAtIndex(localStorage.getItem(APP_PREFIX+"-selectedLocation"))
+                    var locationCoords = {lat: selectedLocation.latitude, 
+                                          lng: selectedLocation.longitude};
+                    //initiates map, centred on location chosen
                     map = new google.maps.Map(document.getElementById('map'), {
-                      center: {lat: -34.397, lng: 150.644},
-                      zoom: 8
+                      center: locationCoords,
+                      zoom: 15
                     });
-                  }
+                    //adds marker on location
+                        var marker = new google.maps.Marker({
+                        position: locationCoords,
+                        map: map,
+                        title: selectedLocation.nickname
+                        });
+                  }                                                            
+                                                            
                 </script>
                 <script async defer
               src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=&amp;callback=initMap">
@@ -108,37 +152,29 @@
                   <script>
                     var outputAreaRef = document.getElementById("outputArea")
                     var output = "";
-                    function weatherResult(forecast)
+                    locationWeatherCache.addLocation(-37.9147,145.1297,"Monash Uni")
+                    locationWeatherCache.addLocation(-37.8142,144.9632,"City Centre")
+                    locationWeatherCache.addLocation(-33.857281,150.877813,"42 Wallaby Way Sydney")
+                    
+                    //callback function used in locationWeatherCache.getweatherAtIndexForDate
+                    function weatherResult(Index,forecast)
                     {
-                        output +="Current temperature is " + forecast["currently"].temperature + "</br>";
-                        output +="The maximum will be " + forecast["daily"].data[1].temperatureMax + "</br>";
-                        output +="The minimum will be " + forecast["daily"].data[1].temperatureMin + "</br>";
+                        output ="Forecast: " + forecast.summary + "</br>";
+                        output +="The maximum will be " + forecast.temperatureMax+ "&deg"+ "C" +"</br>";
+                        output +="The minimum will be " + forecast.temperatureMin + "&deg"+ "C" +"</br>";
+                        output +="The current humidity is " + forecast.humidity *100 + "%" + "</br>";
+                        output +="The current wind speed " + forecast.windSpeed + "km/h" +"</br>";
                         outputAreaRef.innerHTML = output;
                     }
-                
-                  </script>
-
-                    <script type="application/javascript"
-                            src="https://api.forecast.io/forecast/b0d9cfc6e50e108064070318f45d3254/-34.397,150.644?callback=weatherResult">
-                    </script>
-
-                <!-- Remove location from cache -->
-                  <script>
-                    var outputAreaRef = document.getElementById("outputArea")
-                    var output = "";
-                  function deleteLocation(){
-                      output+="It works "
-                      outputAreaRef.innerHTML += output;
-                  }
+                    //gives the weather summary for the current date and time
+                    locationWeatherCache.getWeatherAtIndexForDate(localStorage.getItem(APP_PREFIX+"-selectedLocation"), new Date, weatherResult)
+                      
                   </script>
               </div>
               </div>
             </div>
-          </main>
+          </main>   
         </div>  
-
-        <!--   JavaScript files:   -->
-        <script src="js/locationWeatherCache.js"></script>
-        <script src="js/viewLocationPage.js"></script>
+    
     </body>
 </html>

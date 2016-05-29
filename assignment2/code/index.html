@@ -13,7 +13,11 @@
         <link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
         <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
     </head>
-    
+
+    <!--   JavaScript files:   -->
+    <script src="js/locationWeatherCache.js"></script>
+    <script src="js/mainPage.js"></script>
+
     <body>
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
           <header class="mdl-layout__header">
@@ -25,7 +29,7 @@
               </button>
             </div>
           </header>
-            
+
           <main class="mdl-layout__content">
             <!--   Main page content here:   -->  
 
@@ -34,28 +38,53 @@
                 to use JavaScript to generate a list of similar structure.
             -->  
             <ul class="mdl-list" id="locationList">
-              <li class="mdl-list__item mdl-list__item--two-line" onclick="viewLocation(0);">
-                <span class="mdl-list__item-primary-content">
-                  <img class="mdl-list__item-icon" id="icon0" src="images/loading.png" class="list-avatar" />
-                  <span>Location A</span>
-                  <span id="weather0" class="mdl-list__item-sub-title">Weather summary</span>
-                </span>
-              </li>
-              <li class="mdl-list__item mdl-list__item--two-line" onclick="viewLocation(1);">
-                <span class="mdl-list__item-primary-content">
-                  <img class="mdl-list__item-icon" id="icon1" src="images/loading.png" class="list-avatar" />
-                  <span>Location B</span>
-                  <span id="weather1" class="mdl-list__item-sub-title">Weather summary</span>
-                </span>
-              </li>
+              <script>
+                for(var i=0;i<locationWeatherCache.length();i++) {
+                    
+                  // Get the location object
+                  var loc = locationWeatherCache.locationAtIndex(i);
+                  
+                  // List element
+                  var li = document.createElement('li');
+                  li.className = 'mdl-list__item mdl-list__item--two-line';
+                  
+                  // Span element
+                  var span = document.createElement('span');
+                  span.className = 'mdl-list__item-primary-content';
+                  
+                  // Icon element
+                  var img = document.createElement('img');
+                  img.className = 'mdl-list__item-icon list-avatar';
+                  img.setAttribute('id', 'icon' + i);
+                  img.setAttribute('src', 'images/loading.png');
+                  
+                  // Location title element
+                  var locationTitle = document.createElement('span');
+                  var locationTextNode = document.createTextNode(loc.nickname);
+                  locationTitle.appendChild(locationTextNode);
+                  
+                  // Weather summary element
+                  var weatherSummary = document.createElement('span');
+                  weatherSummary.className = 'mdl-list__item-sub-title';
+                  weatherSummary.setAttribute('id', 'weather' + i);
+                  var weatherTextNode = document.createTextNode('Loading weather...');
+                  weatherSummary.appendChild(weatherTextNode);
+                  
+                  span.appendChild(img); // Add image to span
+                  span.appendChild(locationTitle); // Add location title to span
+                  span.appendChild(weatherSummary); // Add weather summary to span
+                  li.appendChild(span); // Add span to List element
+                  li.setAttribute('onclick', 'viewLocation(' + i + ')');
+                  document.getElementById('locationList').appendChild(li);
+                }
+              </script>
             </ul>
             <!--   End sample locations list.   -->  
 
           </main>
         </div>
+             
         
-        <!--   JavaScript files:   -->
-        <script src="js/locationWeatherCache.js"></script>
-        <script src="js/mainPage.js"></script>
+
     </body>
 </html>
