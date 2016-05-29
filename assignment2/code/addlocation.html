@@ -12,6 +12,25 @@
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
         <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+            #map{
+                margin-left: 0px;
+                margin-top: 0px;
+                height: 500px;
+                width: 500px;
+            }
+            #outputArea{
+                margin-left: 0px;
+                margin-top: 0px;
+                height: 700px;
+                width: 500px;
+            }
+        </style>
 
     </head>
     
@@ -25,15 +44,19 @@
               <span class="mdl-layout-title" id="headerBarTitle">Add Location</span>
             </div>
           </header>
-            <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
-                  <div id="map"></div>
           <main class="mdl-layout__content">
             <div class="content-grid mdl-grid">
               <div class="mdl-cell">
-                <!--   Main page content here:   -->  
-                  
-                  <!-- Raised button with ripple -->
-                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add Location</button>
+                <!--   Main page content here:   -->
+                  <div id="outputArea">
+                      <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+                      <div id="map"></div>
+                      
+                      <!-- Raised button with ripple -->
+                      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                          Add Location
+                      </button>
+                  </div>
               </div>
             </div>
           </main>
