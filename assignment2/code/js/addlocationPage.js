@@ -4,6 +4,12 @@
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
+var newLocation = {
+    lat: "",
+    lng: "",
+    nick: ""
+}
+
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -33.8688, lng: 151.2195},
@@ -16,27 +22,28 @@ function initMap() {
 
     var autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.bindTo('bounds', map);
-
-    var infowindow = new google.maps.InfoWindow();
-    var geoLocationWindow = new google.maps.InfoWindow({map: map});
+    
+    var geocoder = new google.maps.Geocoder;
+    var infowindow = new google.maps.InfoWindow({map: map});
 
     var marker = new google.maps.Marker({
         map: map,
         anchorPoint: new google.maps.Point(0, -29)
     });
      // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-
-      geoLocationWindow.setPosition(pos);
-      geoLocationWindow.setContent('Location found.');
-      map.setCenter(pos);
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            newLocation.lat = pos.lat;
+            newLocation.lng = pos.lng;
+            geocodeLatLng(geocoder, map, infowindow, pos.lat, pos.lng);
+            
+          map.setCenter(pos);
+        }, function() {
+          handleLocationError(true, infoWindow, map.getCenter());
     });
   } else {
     // Browser doesn't support Geolocation
@@ -69,6 +76,7 @@ function initMap() {
         }));
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
+        console.log(place.geometry.location.lat());
         
         var address = '';
         if (place.address_components) {
@@ -89,4 +97,25 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setContent(browserHasGeolocation ?
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
+}
+
+function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
+  var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+  geocoder.geocode({'location': latlng}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        map.setZoom(11);
+        var marker = new google.maps.Marker({
+          position: latlng,
+          map: map
+        });
+        infowindow.setContent(results[1].formatted_address);
+        infowindow.open(map, marker);
+      } else {
+        window.alert('No results found');
+      }
+    } else {
+      window.alert('Geocoder failed due to: ' + status);
+    }
+  });
 }
