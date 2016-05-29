@@ -7,7 +7,6 @@
 var newLocation = {
     lat: "",
     lng: "",
-    nick: ""
 }
 
 function initMap() {
@@ -122,10 +121,32 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude, input) {
   });
 }
 
-var button = document.querySelector('#button1');
+
+var button1 = document.querySelector('#button1');
+
+
 var dialog = document.querySelector('dialog');
-button.addEventListener('click', function() {
+
+if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+}
+
+button1.addEventListener('click', function() {
     dialog.showModal();
     /* Or dialog.show(); to show the dialog without a backdrop. */
 });
-
+dialog.querySelector('.close').addEventListener('click', function() {
+    dialog.close();
+});
+dialog.querySelector('.continue').addEventListener('click', function() {
+    var nickname = /** @type {!HTMLInputElement} */(
+        document.getElementById('nick-input'));
+    if(nickname.value === "") {
+        alert("Please enter a Nickname.");
+    } else if (true) {
+        LocationWeatherCache.addLocation(newLocation.lat, newLocation.lng, nickname.value);
+    } else {
+        
+    }
+    
+});
