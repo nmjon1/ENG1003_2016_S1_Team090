@@ -219,20 +219,6 @@ function LocationWeatherCache()
 
     };
     
-    
-    // Given a nickname, this method looks through all
-    // the stored locations and returns the index of the location with a
-    // matching nickname if one exists, otherwise it
-    // returns null.
-    //
-    this.indexForNickName = new function(nickname) {
-        for (var i = 0; i < locations.length; i++ ){
-            var location = me.locationAtIndex(i);
-            if (location.nickname == nickname){
-                return i
-            }
-        }
-    };
 
 
     // Private methods:

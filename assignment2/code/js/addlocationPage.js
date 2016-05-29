@@ -9,6 +9,9 @@ var newLocation = {
     lng: "",
 }
 
+var goodLocation = false;
+var originalLocation = false;
+
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -33.8688, lng: 151.2195},
@@ -52,6 +55,8 @@ function initMap() {
     autocomplete.addListener('place_changed', function () {
         infowindow.close();
         marker.setVisible(false);
+        goodLocation = false;
+        originalLocation = false;
         var place = autocomplete.getPlace();
         if (!place.geometry) {
             window.alert("Autocomplete's returned place contains no geometry");
@@ -74,9 +79,11 @@ function initMap() {
         }));
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
+        goodLocation = true;
         newLocation.lat = place.geometry.location.lat();
         newLocation.lng = place.geometry.location.lng();
     
+        
         
         var address = '';
         if (place.address_components) {
@@ -112,6 +119,7 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude, input) {
         infowindow.setContent(results[1].formatted_address);
         infowindow.open(map, marker);
           input.value = results[1].formatted_address
+          originalLocation = true;
       } else {
         window.alert('No results found');
       }
@@ -132,8 +140,9 @@ if (! dialog.showModal) {
 }
 
 button1.addEventListener('click', function() {
-    dialog.showModal();
-    /* Or dialog.show(); to show the dialog without a backdrop. */
+    if (goodLocation === true || originalLocation === true) {
+        dialog.showModal();
+    } else {alert("Please enter a valid location")}
 });
 dialog.querySelector('.close').addEventListener('click', function() {
     dialog.close();
@@ -142,11 +151,14 @@ dialog.querySelector('.continue').addEventListener('click', function() {
     var nickname = /** @type {!HTMLInputElement} */(
         document.getElementById('nick-input'));
     if(nickname.value === "") {
-        alert("Please enter a Nickname.");
-    } else if (true) {
-        LocationWeatherCache.addLocation(newLocation.lat, newLocation.lng, nickname.value);
+        locationWeatherCache.addLocation(newLocation.lat, newLocation.lng, document.getElementById('pac-input').value);
+        alert("Location added!");
+        window.open("/code/index.html",'_self')
     } else {
-        
+        locationWeatherCache.addLocation(newLocation.lat, newLocation.lng, nickname.value);
+        alert("Location added!");
+        window.open("/code/index.html",'_self')
     }
+    
     
 });
