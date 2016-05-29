@@ -75,6 +75,8 @@ function initMap() {
         }));
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
+        newLocation.lat = place.geometry.location.lat();
+        newLocation.lng = place.geometry.location.lng();
     
         
         var address = '';
