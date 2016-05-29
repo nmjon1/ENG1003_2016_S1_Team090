@@ -39,9 +39,8 @@ function initMap() {
             };
             newLocation.lat = pos.lat;
             newLocation.lng = pos.lng;
-            geocodeLatLng(geocoder, map, infowindow, pos.lat, pos.lng);
-            
-          map.setCenter(pos);
+            geocodeLatLng(geocoder, map, infowindow, pos.lat, pos.lng, input);
+            map.setCenter(pos);
         }, function() {
           handleLocationError(true, infoWindow, map.getCenter());
     });
@@ -76,7 +75,7 @@ function initMap() {
         }));
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
-        console.log(place.geometry.location.lat());
+    
         
         var address = '';
         if (place.address_components) {
@@ -99,7 +98,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: Your browser doesn\'t support geolocation.');
 }
 
-function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
+function geocodeLatLng(geocoder, map, infowindow, latitude, longitude, input) {
   var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
   geocoder.geocode({'location': latlng}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
@@ -111,6 +110,7 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
         });
         infowindow.setContent(results[1].formatted_address);
         infowindow.open(map, marker);
+          input.value = results[1].formatted_address
       } else {
         window.alert('No results found');
       }
