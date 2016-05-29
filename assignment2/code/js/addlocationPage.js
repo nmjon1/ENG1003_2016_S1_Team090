@@ -12,16 +12,37 @@ function initMap() {
     var input = /** @type {!HTMLInputElement} */(
         document.getElementById('pac-input'));
 
-    var types = document.getElementById('type-selector');
+    //var types = document.getElementById('type-selector');
 
     var autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.bindTo('bounds', map);
 
     var infowindow = new google.maps.InfoWindow();
+    var geoLocationWindow = new google.maps.InfoWindow({map: map});
+
     var marker = new google.maps.Marker({
         map: map,
         anchorPoint: new google.maps.Point(0, -29)
     });
+     // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      geoLocationWindow.setPosition(pos);
+      geoLocationWindow.setContent('Location found.');
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+
 
     autocomplete.addListener('place_changed', function () {
         infowindow.close();
