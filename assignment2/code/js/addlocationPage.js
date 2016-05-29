@@ -121,3 +121,10 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude, input) {
     }
   });
 }
+
+var button = document.querySelector('#button1');
+var dialog = document.querySelector('dialog');
+button.addEventListener('click', function() {
+    dialog.showModal();
+    /* Or dialog.show(); to show the dialog without a backdrop. */
+});
