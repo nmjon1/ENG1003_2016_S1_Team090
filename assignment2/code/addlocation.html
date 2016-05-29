@@ -82,11 +82,24 @@
                       <div id="map"></div>
                       <!-- Raised button with ripple -->
                       <div style="margin: auto; width: 50%; padding: 10px">
-                          <button id="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                          <button id="button1" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                               Add Location
                           </button>
                       </div>
                   </div>
+                  <dialog id="dialog" class="mdl-dialog">
+                      <div class="mdl-dialog__content">
+                          <p>
+                              Would you like to enter a nickname?
+                          </p>
+                          <input id="nick-input" class="controls" type="text" placeholder="Enter a Nickname">
+                      </div>
+
+                      <div class="mdl-dialog__actions">
+                          <button type="button" class="mdl-button continue mdl-js-button mdl-button--raised mdl-js-ripple-effect">Add Location</button>
+                          <button type="button" class="mdl-button close mdl-js-button mdl-button--raised mdl-js-ripple-effect">Cancel</button>
+                      </div>
+                  </dialog>
               </div>
             </div>
           </main>

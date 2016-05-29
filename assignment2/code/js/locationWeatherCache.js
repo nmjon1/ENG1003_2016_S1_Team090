@@ -218,6 +218,7 @@ function LocationWeatherCache()
         callback(index,today)
 
     };
+    
 
 
     // Private methods:
